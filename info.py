@@ -22,7 +22,7 @@ BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAEKAfPmVkG24Tu0QgMfJcYKNv2uvGx
 SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
 
 # --- Database Configuration (5 Separate Databases) ---
-DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://heraneg660:heraneg660@cluster0.whyvk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://yimiva2523:yimiva2523@cluster0.zvaaxhh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DATABASE_2 = environ.get('DATABASE_2', "")
 DATABASE_3 = environ.get('DATABASE_3', "")
 DATABASE_4 = environ.get('DATABASE_4', "")
