@@ -1,9 +1,7 @@
-LnvNjE' re
+import re
 import os
 from os import environ
-
-# আপনার স্ক্রিপ্ট ফাইল যদি "script.py" নামে হয়, তাহলে এই লাইনটি এভাবে ঠিক করুন:
-from script import script  
+from script import script
 
 # --- Utility Functions ---
 id_pattern = re.compile(r'^.\d+$')
@@ -19,7 +17,8 @@ def is_enabled(value, default):
 API_ID = int(environ.get('API_ID', '20632324'))
 API_HASH = environ.get('API_HASH', '7472998b241dd149fc2b2167ce045c0e')
 BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAG5leTxjaOty2aHkV-MvAR1FfR79LnvNjE')
-SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
+# সেশন ফাইল সংক্রান্ত সমস্যা এড়ানোর জন্য SESSION নামটি BOT_TOKEN থেকে নেওয়া হচ্ছে
+SESSION = environ.get('BOT_TOKEN')
 
 # --- Database Configuration (5 Separate Databases) ---
 DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://yimiva2523:yimiva2523@cluster0.zvaaxhh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
