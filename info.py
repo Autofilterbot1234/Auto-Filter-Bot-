@@ -1,7 +1,9 @@
 import re
 import os
 from os import environ
-from Script import script  # <-- Case-sensitive import fixed
+
+# আপনার স্ক্রিপ্ট ফাইল যদি "script.py" নামে হয়, তাহলে এই লাইনটি এভাবে ঠিক করুন:
+from script import script  
 
 # --- Utility Functions ---
 id_pattern = re.compile(r'^.\d+$')
