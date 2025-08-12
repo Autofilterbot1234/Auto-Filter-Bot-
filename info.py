@@ -36,9 +36,9 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "CTG_Movies_Bot")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'MoviesCollection')
 
 # --- Admins and Channel IDs ---
-ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246').split()]
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-100...')) # আপনার লগ চ্যানেল আইডি
-CHANNELS = [int(ch) for ch in environ.get('CHANNELS', '-1001883303504').split()] # ফাইল ইনডেক্স করার চ্যানেল
+ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246,8090888302').split()]
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002610927997')) # আপনার লগ চ্যানেল আইডি
+CHANNELS = [int(ch) for ch in environ.get('CHANNELS', '-1002728760268').split()] # ফাইল ইনডেক্স করার চ্যানেল
 
 # --- Custom Links ---
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/Movie_Request_Group_23')
