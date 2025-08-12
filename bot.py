@@ -1,32 +1,26 @@
+import sys
+import glob
 import logging
 import asyncio
-from pyrogram import idle
+import importlib
+from pathlib import Path
+from pyrogram import Client, idle
 from aiohttp import web
+from pyrogram.handlers import RawUpdateHandler # <-- ডিবাগারের জন্য নতুন ইম্পোর্ট
 
-# --- কোর মডিউল ইম্পোর্ট ---
-from info import LOG_CHANNEL, ON_HEROKU, PORT, URL
+# --- তথ্য ও স্ক্রিপ্ট ইম্পোর্ট ---
+from info import (
+    LOG_CHANNEL, ON_HEROKU, PORT, URL
+)
+from script import script
+
+# --- কাস্টম মডিউল ইম্পোর্ট ---
 from CTG_Movies_Bot.bot import CTG_Movies_Bot
 from CTG_Movies_Bot.server import web_server
 from CTG_Movies_Bot.keep_alive import ping_server
+from database.ia_filterdb import MediaModels, mongo_clients, DATABASE_NAME
 from utils.temp import temp
-
-# --- সব প্লাগইন ম্যানুয়ালি ইম্পোর্ট করা হচ্ছে ---
-# এটি নিশ্চিত করবে যে প্রতিটি হ্যান্ডলার সঠিকভাবে রেজিস্টার হয়েছে
-try:
-    from plugins import commands
-    from plugins import channel_indexer
-    from plugins import db_admin
-    from plugins import fsub_admin
-    from plugins import join_req
-    from plugins import pm_filter
-    from plugins import stream
-    from plugins import user_index
-    from plugins import debugger
-    print("All plugins imported successfully.")
-except ImportError as e:
-    print(f"Error importing plugins: {e}")
-    # কোনো প্লাগইন না চললে বট বন্ধ হয়ে যাবে, যা error ধরতে সাহায্য করবে
-    exit()
+from plugins.debugger import raw_update_handler # <-- ডিবাগার ফাংশন ইম্পোর্ট
 
 # --- লগিং সেটআপ ---
 logging.basicConfig(
@@ -43,10 +37,18 @@ async def main():
     await CTG_Movies_Bot.start()
     bot_info = await CTG_Movies_Bot.get_me()
     temp.BOT_USERNAME = bot_info.username
+    temp.BOT_ID = bot_info.id
     
+    # ----- ডিবাগিং হ্যান্ডলারটি এখানে যোগ করা হয়েছে -----
+    CTG_Movies_Bot.add_handler(RawUpdateHandler(raw_update_handler))
+    logger.info("Raw update handler for debugging has been added.")
+    
+    # --- ওয়েব সার্ভার এবং অন্যান্য কাজ ---
     if ON_HEROKU:
         asyncio.create_task(ping_server())
 
+    # ... (ডাটাবেস স্ট্যাটাস চেক করার কোড) ...
+    
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0"
@@ -55,12 +57,11 @@ async def main():
     logger.info(f"{bot_info.first_name} is started.")
     if LOG_CHANNEL:
         try:
-            await CTG_Movies_Bot.send_message(LOG_CHANNEL, "<b>✅ Bot restarted and online!</b>")
+            await CTG_Movies_Bot.send_message(LOG_CHANNEL, "<b>✅ Bot restarted with debugger!</b>")
         except Exception as e:
             logger.warning(f"Could not send start message to log channel: {e}")
             
     await idle()
-    await CTG_Movies_Bot.stop()
 
 if __name__ == '__main__':
     try:
