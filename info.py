@@ -1,12 +1,11 @@
 import re
 import os
 from os import environ
-from Script import script  # script.py ফাইল থেকে IMDB টেমপ্লেট ইম্পোর্ট করার জন্য
+from script import script  #<-- সমস্যা ১ ঠিক করা হয়েছে
 
 # --- Utility Functions ---
 id_pattern = re.compile(r'^.\d+$')
 def is_enabled(value, default):
-    """স্ট্রিংকে বুলিয়ানে রূপান্তর করার জন্য একটি হেল্পার ফাংশন"""
     if str(value).lower() in ["true", "yes", "1", "enable", "y"]:
         return True
     elif str(value).lower() in ["false", "no", "0", "disable", "n"]:
@@ -15,30 +14,25 @@ def is_enabled(value, default):
         return default
 
 # --- Bot Information ---
-# আপনার টেলিগ্রাম অ্যাপ এবং বটের তথ্য এখানে দিন অথবা এনভায়রনমেন্ট ভেরিয়েবল ব্যবহার করুন।
-API_ID = int(environ.get('API_ID', '20632324')) # আপনার API ID দিন
-API_HASH = environ.get('API_HASH', '7472998b241dd149fc2b2167ce045c0e') # আপনার API Hash দিন
-BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAEKAfPmVkG24Tu0QgMfJcYKNv2uvGxdi88') # আপনার বটের টোকেন এখানে দিন
+API_ID = int(environ.get('API_ID', '20632324'))
+API_HASH = environ.get('API_HASH', '7472998b241dd149fc2b2167ce045c0e')
+BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAEKAfPmVkG24Tu0QgMfJcYKNv2uvGxdi88')
 SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
 
 # --- Database Configuration (5 Separate Databases) ---
-# আপনি যে ডাটাবেসগুলো ব্যবহার করতে চান, সেগুলোর URI এখানে দিন।
-# যেটি ব্যবহার করতে চান না, সেটি ফাঁকা রাখুন ("")।
-DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://mewayo8672:mewayo8672@cluster0.ozhvczp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0") # প্রধান ডাটাবেস (আবশ্যক)
+DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://mewayo8672:mewayo8672@cluster0.ozhvczp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DATABASE_2 = environ.get('DATABASE_2', "")
 DATABASE_3 = environ.get('DATABASE_3', "")
 DATABASE_4 = environ.get('DATABASE_4', "")
 DATABASE_5 = environ.get('DATABASE_5', "")
-
-# সক্রিয় ডাটাবেসগুলোর একটি তালিকা তৈরি করা হচ্ছে
 DATABASE_URIS = [uri for uri in [DATABASE_1, DATABASE_2, DATABASE_3, DATABASE_4, DATABASE_5] if uri]
 DATABASE_NAME = environ.get('DATABASE_NAME', "CTG_Movies_Bot")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'MoviesCollection')
 
 # --- Admins and Channel IDs ---
-ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246,8090888302').split()]
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002610927997')) # আপনার লগ চ্যানেল আইডি
-CHANNELS = [int(ch) for ch in environ.get('CHANNELS', '-1002728760268').split()] # ফাইল ইনডেক্স করার চ্যানেল
+ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246 8090888302').split()] #<-- সমস্যা ২ ঠিক করা হয়েছে (স্পেস ব্যবহার করে)
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002610927997'))
+CHANNELS = [int(ch) for ch in environ.get('CHANNELS', '-1002728760268').split()]
 
 # --- Custom Links ---
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/Movie_Request_Group_23')
@@ -46,7 +40,7 @@ OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/ctgmovies23')
 
 # --- Verification System Configuration ---
 VERIFY = is_enabled(environ.get('VERIFY', False), False)
-VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 24)) # ভেরিফিকেশনের মেয়াদ (ঘন্টায়)
+VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 24))
 VERIFIED_LOG = int(environ.get('VERIFIED_LOG', LOG_CHANNEL))
 HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/HowToVerifyTutorial')
 
