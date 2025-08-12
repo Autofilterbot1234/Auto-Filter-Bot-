@@ -16,9 +16,9 @@ def is_enabled(value, default):
 
 # --- Bot Information ---
 # আপনার টেলিগ্রাম অ্যাপ এবং বটের তথ্য এখানে দিন অথবা এনভায়রনমেন্ট ভেরিয়েবল ব্যবহার করুন।
-API_ID = int(environ.get('API_ID', '19234664')) # আপনার API ID দিন
-API_HASH = environ.get('API_HASH', '29c2f3b3d115cf1b0231d816deb271f5') # আপনার API Hash দিন
-BOT_TOKEN = environ.get('BOT_TOKEN', 'YOUR_BOT_TOKEN') # আপনার বটের টোকেন এখানে দিন
+API_ID = int(environ.get('API_ID', '20632324')) # আপনার API ID দিন
+API_HASH = environ.get('API_HASH', '7472998b241dd149fc2b2167ce045c0e') # আপনার API Hash দিন
+BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAEKAfPmVkG24Tu0QgMfJcYKNv2uvGxdi88') # আপনার বটের টোকেন এখানে দিন
 SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
 
 # --- Database Configuration (5 Separate Databases) ---
