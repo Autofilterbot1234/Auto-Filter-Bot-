@@ -16,17 +16,14 @@ async def raw_update_handler(client, update, users, chats):
     logger.info(f"--- RAW UPDATE RECEIVED ---\n{update}\n---------------------------")
 
 # --- একটি সাধারণ পিং কমান্ড ---
-@Client.on_message(filters.command("ping"))
+@Client.on_message(filters.command("ping") & filters.private)
 async def ping_command(client, message):
     """
     বটটি মেসেজ প্রসেস করতে পারছে কিনা তা পরীক্ষা করার জন্য একটি সাধারণ কমান্ড।
     """
-    logger.info(f"Received /ping command from {message.from_user.id}")
-    await message.reply_text("Pong!")
-
-# --- হ্যান্ডলারগুলো যোগ করা হচ্ছে ---
-# RawUpdateHandler সরাসরি ক্লায়েন্টে যোগ করতে হয়, তাই আমরা এটি __main__ এ করব।
-# আপাতত, এই ফাইলটি শুধু পিং কমান্ডের জন্য থাকবে এবং আমরা বট চালু হওয়ার সময় raw handler যোগ করব।
-
-# bot.py ফাইলে এই হ্যান্ডলারটি যোগ করতে হবে
-# CTG_Movies_Bot.add_handler(RawUpdateHandler(raw_update_handler))
+    logger.info(f"Received /ping command from user {message.from_user.id}")
+    try:
+        await message.reply_text("Pong!")
+        logger.info("Successfully replied 'Pong!'")
+    except Exception as e:
+        logger.error(f"Failed to reply to /ping command: {e}")
