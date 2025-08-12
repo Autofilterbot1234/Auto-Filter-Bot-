@@ -1,50 +1,24 @@
-pyrofork==2.3.45
-tgcrypto
-pymongo[srv]==4.11.1
-motor==3.7.0
-marshmallow==3.26.1
-umongo
-requests
+# Pyrogram Core
+pyrogram==2.0.106
+TGCrypto==1.2.5
+
+# Database
+motor==3.3.2
+umongo==3.0.1
+marshmallow==3.20.1
+pymongo[srv]
+
+# Web Server
+aiohttp==3.9.0
+Jinja2==3.1.2
+
+# Utilities
+requests==2.31.0
 bs4
-git+https://github.com/Joelkb/cinemagoer
-shortzy
-datetime
-pytz
-aiohttp
+imdbpy==2022.7.9
+psutil
+humanize
 
-# Master tools
-PyLeaves==1.0.2
-Wikipedia
-
-# Other tools
-opencv-python-headless==4.8.1.78
-python-dotenv==0.21.1
-speedtest
-humanize==4.6.0
-Pillow==9.4.0
-psutil==5.9.4
-numpy
-wheel
-ujson
-wget
-pytz
-aiofiles
-dnspython==2.3.0
-python-decouple
-ffmpeg-python==0.2.0
-
-# Jinja and Scheduler
-jinja2
-apscheduler
-pyshorteners
-pyromod
-colorama
-
-# Text Matching Tools
+# Text Matching
 fuzzywuzzy
 python-Levenshtein
-
-# Additional Tools
-googletrans==3.1.0a0
-telegraph==2.2.0
-gTTS==2.3.1
