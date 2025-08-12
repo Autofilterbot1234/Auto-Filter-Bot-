@@ -1,9 +1,10 @@
 import os
 import logging
+import random
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from info import ADMINS, GRP_LNK, OWNER_LNK, PICS
-from Script import script
+from script import script # <-- সমস্যাটি এখানে ঠিক করা হয়েছে
 from database.users_chats_db import db
 from database.ia_filterdb import MediaModels
 from utils.temp import temp
@@ -58,20 +59,20 @@ async def stats_command(client, message):
 
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
 async def broadcast_command(client, message):
-    # এই ফিচারটি পরে আরও উন্নত করা যেতে পারে (যেমন সফল, ব্যর্থ কাউন্ট সহ)
     all_users = await db.get_all_users()
     broadcast_msg = message.reply_to_message
     total_users = await db.total_users_count()
     sts = await message.reply_text(f"Broadcasting to {total_users} users...")
 
     done = 0
+    failed = 0
     async for user in all_users:
         try:
             await broadcast_msg.copy(chat_id=int(user['id']))
             done += 1
         except Exception:
-            pass # আপাতত ব্যর্থ হলে কিছু করছি না
-    await sts.edit_text(f"Broadcast complete! Sent to {done} users.")
+            failed += 1
+    await sts.edit_text(f"Broadcast complete!\n\nSent to: {done} users\nFailed for: {failed} users")
 
 @Client.on_callback_query(filters.regex('^about$'))
 async def about_callback(client, query):
