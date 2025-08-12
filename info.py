@@ -24,7 +24,7 @@ SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
 # --- Database Configuration (5 Separate Databases) ---
 # আপনি যে ডাটাবেসগুলো ব্যবহার করতে চান, সেগুলোর URI এখানে দিন।
 # যেটি ব্যবহার করতে চান না, সেটি ফাঁকা রাখুন ("")।
-DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://...") # প্রধান ডাটাবেস (আবশ্যক)
+DATABASE_1 = environ.get('DATABASE_1', "mongodb+srv://mewayo8672:mewayo8672@cluster0.ozhvczp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0") # প্রধান ডাটাবেস (আবশ্যক)
 DATABASE_2 = environ.get('DATABASE_2', "")
 DATABASE_3 = environ.get('DATABASE_3', "")
 DATABASE_4 = environ.get('DATABASE_4', "")
