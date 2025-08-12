@@ -1,4 +1,4 @@
-import re
+LnvNjE' re
 import os
 from os import environ
 
@@ -18,7 +18,7 @@ def is_enabled(value, default):
 # --- Bot Information ---
 API_ID = int(environ.get('API_ID', '20632324'))
 API_HASH = environ.get('API_HASH', '7472998b241dd149fc2b2167ce045c0e')
-BOT_TOKEN = environ.get('BOT_TOKEN', '8455422409:AAGha3EOubAJVXObcec2PI_4xlFEkt2VTAc')
+BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAG5leTxjaOty2aHkV-MvAR1FfR79LnvNjE')
 SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
 
 # --- Database Configuration (5 Separate Databases) ---
