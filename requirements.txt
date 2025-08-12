@@ -1,0 +1,17 @@
+# Pyrogram Core
+pyrogram
+tgcrypto
+
+# Database
+motor
+umongo
+
+# Web Server
+aiohttp
+jinja2
+
+# Utilities
+requests
+fuzzywuzzy
+python-Levenshtein
+imdbpy
