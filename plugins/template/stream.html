@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ file_name }} | CTG Movies Bot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #1a202c;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .video-js .vjs-big-play-button {
+            background-color: rgba(237, 58, 126, 0.8);
+            border: none;
+            border-radius: 50%;
+        }
+        .vjs-control-bar {
+            background-color: rgba(26, 32, 44, 0.7) !important;
+        }
+        .btn {
+            background-color: #ed3a7e;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #c52d6a;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+        <!-- Video Player -->
+        <div class="aspect-w-16 aspect-h-9">
+            <video
+                id="my-video"
+                class="video-js vjs-fluid"
+                controls
+                preload="auto"
+                poster="https://telegra.ph/file/a84b392a8d42d3b2593b4.jpg"
+                data-setup="{}"
+            >
+                <source src="{{ stream_link }}" type="video/mp4" />
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+        </div>
+
+        <div class="p-6">
+            <!-- File Name -->
+            <h1 class="text-2xl font-bold mb-2 truncate" title="{{ file_name }}">{{ file_name }}</h1>
+            <p class="text-gray-400 mb-6">File Size: {{ file_size }}</p>
+
+            <!-- Download and Other Player Buttons -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="{{ download_link }}" class="btn text-white font-bold py-3 px-4 rounded-lg text-center flex items-center justify-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Direct Download
+                </a>
+                
+                <a href="vlc://{{ stream_link }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg text-center flex items-center justify-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                    Watch in VLC Player
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-gray-500">
+        <p>Powered by <a href="https://t.me/ctgmovies23" class="text-pink-400 hover:underline">CTG Movies Bot</a></p>
+    </footer>
+
+    <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
+</body>
+</html>
