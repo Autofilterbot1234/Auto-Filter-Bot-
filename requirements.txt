@@ -6,7 +6,7 @@ TGCrypto==1.2.5
 motor==3.3.2
 umongo==3.0.1
 marshmallow==3.20.1
-pymongo[srv]
+pymongo[srv]==4.3.3  # <-- প্রধান পরিবর্তনটি এখানে করা হয়েছে
 
 # Web Server
 aiohttp==3.9.0
