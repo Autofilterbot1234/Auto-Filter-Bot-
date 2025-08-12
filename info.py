@@ -33,7 +33,7 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'MoviesCollection')
 
 # --- Admins and Channel IDs ---
 ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246 8090888302').split()]
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002610927997'))
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002724644600'))
 CHANNELS = [int(ch) for ch in environ.get('CHANNELS', '-1002728760268').split()]
 
 # --- Custom Links ---
