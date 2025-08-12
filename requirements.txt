@@ -1,24 +1,23 @@
 # Pyrogram Core
-pyrogram
-TGCrypto
+pyrogram==2.0.106
+TGCrypto==1.2.5
 
-# Database
-motor
-umongo
-marshmallow
-pymongo  # <-- প্রধান পরিবর্তনটি এখানে করা হয়েছে
+# Database (Guaranteed Compatibility)
+motor==3.1.2
+pymongo==4.3.3
+umongo==3.0.1
+marshmallow==3.19.0
 
 # Web Server
-aiohttp
-Jinja2
+aiohttp==3.8.4
+Jinja2==3.1.2
 
 # Utilities
-requests
-bs4
-imdbpy
-psutil
-humanize
+requests==2.28.2
+psutil==5.9.4
+humanize==4.4.0
 
 # Text Matching
-fuzzywuzzy
-python-Levenshtein
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.20.9
+imdbpy==2022.7.9
