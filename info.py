@@ -18,7 +18,7 @@ def is_enabled(value, default):
 # --- Bot Information ---
 API_ID = int(environ.get('API_ID', '20632324'))
 API_HASH = environ.get('API_HASH', '7472998b241dd149fc2b2167ce045c0e')
-BOT_TOKEN = environ.get('BOT_TOKEN', '8323096986:AAEKAfPmVkG24Tu0QgMfJcYKNv2uvGxdi88')
+BOT_TOKEN = environ.get('BOT_TOKEN', '8455422409:AAGha3EOubAJVXObcec2PI_4xlFEkt2VTAc')
 SESSION = environ.get('SESSION', 'CTG_Movies_Bot')
 
 # --- Database Configuration (5 Separate Databases) ---
@@ -28,7 +28,7 @@ DATABASE_3 = environ.get('DATABASE_3', "")
 DATABASE_4 = environ.get('DATABASE_4', "")
 DATABASE_5 = environ.get('DATABASE_5', "")
 DATABASE_URIS = [uri for uri in [DATABASE_1, DATABASE_2, DATABASE_3, DATABASE_4, DATABASE_5] if uri]
-DATABASE_NAME = environ.get('DATABASE_NAME', "CTG_Movies_Bot")
+DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'MoviesCollection')
 
 # --- Admins and Channel IDs ---
