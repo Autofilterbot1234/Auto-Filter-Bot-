@@ -1,17 +1,18 @@
 # Pyrogram Core
-pyrogram
+pyrogram==2.0.106
 tgcrypto
 
 # Database
-motor
-umongo
+motor==3.3.2
+umongo==4.0.0
+marshmallow==3.20.1
 
 # Web Server
-aiohttp
-jinja2
+aiohttp==3.9.0
+jinja2==3.1.2
 
 # Utilities
-requests
-fuzzywuzzy
-python-Levenshtein
-imdbpy
+requests==2.31.0
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.23.0
+imdbpy==2022.7.9
