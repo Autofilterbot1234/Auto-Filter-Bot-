@@ -5,7 +5,7 @@ from pymongo.errors import DuplicateKeyError
 from marshmallow.exceptions import ValidationError
 
 from info import DATABASE_URIS, DATABASE_NAME, COLLECTION_NAME
-from utils import unpack_new_file_id
+from utils.helpers import unpack_new_file_id # <-- সমস্যাটি এখানে ঠিক করা হয়েছে
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -37,7 +37,6 @@ async def get_next_db_model():
     for i, client in enumerate(mongo_clients):
         try:
             stats = await client[DATABASE_NAME].command('dbStats')
-            # 512MB ফ্রি টিয়ারের 95% (486MB) পূর্ণ হলে পরবর্তী ডাটাবেসে যাবে
             if (stats.get('dataSize', 0) + stats.get('indexSize', 0)) < 486 * 1024 * 1024:
                 logger.info(f"Using Database {i+1} for saving new files.")
                 return MediaModels[i]
@@ -52,8 +51,9 @@ async def save_file(media):
     SaveMediaModel = await get_next_db_model()
     if not SaveMediaModel:
         return False, "All databases are full."
-
-    file_id = media.file_id
+    
+    # unpack_new_file_id ফাংশনটি আর এখানে প্রয়োজন নেই কারণ আমরা সরাসরি মিডিয়া আইডি ব্যবহার করব
+    file_id = media.file_id 
     file_name = media.file_name.replace('_', ' ')
     
     for model in MediaModels:
@@ -63,7 +63,7 @@ async def save_file(media):
     
     try:
         file_doc = SaveMediaModel(
-            file_id=file_id,
+            _id=file_id, # _id হিসেবে সরাসরি file_id ব্যবহার করা হচ্ছে
             file_name=file_name,
             file_size=media.file_size,
             file_type=media.file_type,
@@ -91,7 +91,6 @@ async def get_search_results(query, file_type=None, max_results=10, offset=0):
         files = await model.find(filter_).to_list(length=None)
         all_files.extend(files)
 
-    # সব ফলাফল একত্রিত করে সর্ট করা
     all_files.sort(key=lambda x: x.id, reverse=True)
     
     total_results = len(all_files)
