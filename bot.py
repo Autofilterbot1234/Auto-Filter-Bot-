@@ -6,14 +6,14 @@ import importlib
 from pathlib import Path
 from pyrogram import Client, idle
 from aiohttp import web
+from pyrogram.handlers import RawUpdateHandler # <-- ডিবাগারের জন্য নতুন ইম্পোর্ট
 
 # --- তথ্য ও স্ক্রিপ্ট ইম্পোর্ট ---
 from info import (
-    BOT_TOKEN, API_ID, API_HASH, SESSION,
+    BOT_TOKEN, API_ID, API_HASH,
     LOG_CHANNEL, ON_HEROKU, PORT, URL, FQDN
 )
-# ----- সমস্যাটি এখানে ঠিক করা হয়েছে -----
-from script import script 
+from script import script
 
 # --- কাস্টম মডিউল ইম্পোর্ট ---
 from CTG_Movies_Bot.bot import CTG_Movies_Bot
@@ -21,6 +21,7 @@ from CTG_Movies_Bot.server import web_server
 from CTG_Movies_Bot.keep_alive import ping_server
 from database.ia_filterdb import MediaModels, mongo_clients, DATABASE_NAME
 from utils.temp import temp
+from plugins.debugger import raw_update_handler # <-- ডিবাগার ফাংশন ইম্পোর্ট
 
 # --- লগিং সেটআপ ---
 logging.basicConfig(
@@ -43,6 +44,10 @@ async def main():
     bot_info = await CTG_Movies_Bot.get_me()
     temp.BOT_USERNAME = bot_info.username
     temp.BOT_ID = bot_info.id
+    
+    # ----- ডিবাগিং হ্যান্ডলারটি এখানে যোগ করা হয়েছে -----
+    CTG_Movies_Bot.add_handler(RawUpdateHandler(raw_update_handler))
+    logger.info("Raw update handler for debugging has been added.")
     
     # --- সব প্লাগইন ইম্পোর্ট করা হচ্ছে ---
     for name in files:
@@ -78,7 +83,7 @@ async def main():
     # --- ওয়েব সার্ভার চালু করা হচ্ছে ---
     app = web.AppRunner(await web_server())
     await app.setup()
-    bind_address = "0.0.0.0" # Koyeb/Heroku'র জন্য 0.0.0.0 ব্যবহার করা হয়
+    bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
     logger.info(f"Web server started successfully on port {PORT}")
     
@@ -95,7 +100,6 @@ async def main():
 # --- বট চালানো হচ্ছে ---
 if __name__ == '__main__':
     try:
-        # Pyrogram-এর নতুন সংস্করণের জন্য get_event_loop() এর পরিবর্তে asyncio.run() ব্যবহার করা ভালো
         asyncio.run(main())
     except KeyboardInterrupt:
         logger.info('Bot stopped manually.')
