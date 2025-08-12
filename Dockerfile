@@ -1,19 +1,23 @@
-FROM python:3.11-slim
+# পাইথনের একটি স্থিতিশীল ভার্সন ব্যবহার করা হচ্ছে
+FROM python:3.11.7-slim
 
-# Install necessary dependencies
+# প্রয়োজনীয় সিস্টেম প্যাকেজ ইনস্টল করা হচ্ছে
 RUN apt-get update && apt-get install -y --no-install-recommends git curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# কাজের ডিরেক্টরি সেট করা হচ্ছে
 WORKDIR /app
 
-# Copy requirements file and install python packages
+# requirements.txt ফাইলটি কপি করা হচ্ছে
 COPY requirements.txt .
+
+# --- প্রধান পরিবর্তনটি এখানে ---
+# pip ক্যাশ পরিষ্কার করে এবং requirements.txt থেকে লাইব্রেরি ইনস্টল করা হচ্ছে
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# বাকি অ্যাপ্লিকেশন কোড কপি করা হচ্ছে
 COPY . .
 
-# Command to run the bot
+# বট চালানোর জন্য কমান্ড
 CMD ["python3", "bot.py"]
