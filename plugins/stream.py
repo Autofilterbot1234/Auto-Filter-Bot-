@@ -1,81 +1,85 @@
 import logging
-import math
 import mimetypes
-from pyrogram import Client
+import secrets
+import asyncio
+from pyrogram import Client, filters
 from aiohttp import web
-from CTG_Movies_Bot.server import routes  # সার্ভার থেকে রুট ইম্পোর্ট করা হচ্ছে
-from info import URL, PROTECT_CONTENT, DELETE_TIME
+from jinja2 import Environment, FileSystemLoader
+
+from CTG_Movies_Bot.server import routes
+from info import URL, PROTECT_CONTENT, DELETE_TIME, FQDN
 from database.ia_filterdb import get_file_details
-from utils.helpers import check_verify_token, mark_user_as_verified
+from utils.helpers import check_verify_token, mark_user_as_verified, get_size
 from utils.temp import temp
 
 logger = logging.getLogger(__name__)
 
-# --- ভেরিফিকেশন রুট হ্যান্ডলার ---
+# Jinja2 টেমপ্লেট এনভায়রনমেন্ট সেটআপ
+template_env = Environment(loader=FileSystemLoader('CTG_Movies_Bot/template'))
+
+# --- ওয়েব রুট হ্যান্ডলারগুলো ---
+
 @routes.get("/verify")
 async def verify_handler(request: web.Request):
     token = request.query.get("token")
     if not token:
         return web.HTTPNotFound(text="Missing token.")
-
+    
     token_info = await check_verify_token(token)
     if not token_info:
         return web.HTTPForbidden(text="Link expired or invalid.")
-
+    
     user_id = token_info['user_id']
     file_id = token_info['file_id']
     
     await mark_user_as_verified(user_id)
     
-    # ব্যবহারকারীকে টেলিগ্রামে ফাইলের লিঙ্কে রিডাইরেক্ট করা হচ্ছে
     redirect_url = f"https://t.me/{temp.BOT_USERNAME}?start=file_{file_id}"
     return web.HTTPFound(redirect_url)
 
 
+@routes.get(r"/watch/{media_id:\d+}/{file_name}")
+async def stream_page_handler(request: web.Request):
+    """স্ট্রিমিং এর জন্য HTML পেজটি রেন্ডার করে"""
+    try:
+        media_id = int(request.match_info['media_id'])
+        file_details = await get_file_details(str(media_id))
+        if not file_details:
+            return web.HTTPNotFound(text="File not found")
+
+        file_info = file_details[0]
+        
+        # টেমপ্লেট রেন্ডার করা হচ্ছে
+        template = template_env.get_template('stream.html')
+        
+        page_content = template.render(
+            file_name=file_info.file_name,
+            file_size=get_size(file_info.file_size),
+            stream_link=f"{URL}stream/{media_id}/{file_info.file_name}",
+            download_link=f"{URL}download/{media_id}/{file_info.file_name}"
+        )
+        return web.Response(text=page_content, content_type='text/html')
+    except Exception as e:
+        logger.error(f"Error rendering stream page: {e}", exc_info=True)
+        return web.HTTPInternalServerError()
+
+
+@routes.get(r"/(stream|download)/{media_id:\d+}/{file_name}")
+async def stream_and_download_handler(request: web.Request):
+    """ফাইল ডাউনলোড এবং স্ট্রিম করার মূল হ্যান্ডলার"""
+    try:
+        media_id = int(request.match_info['media_id'])
+        return await media_streamer(request, media_id)
+    except Exception as e:
+        logger.error(f"Error in stream/download handler: {e}", exc_info=True)
+        return web.HTTPInternalServerError()
+
+
 # --- স্ট্রিমিং এর মূল লজিক (media_streamer) ---
 async def media_streamer(request: web.Request, media_id: int):
-    range_header = request.headers.get("Range", 0)
-    
-    file_details = await get_file_details(str(media_id))
-    if not file_details:
-        raise web.HTTPNotFound(text="File not found in database.")
-    
-    stream_client = Client.get_instance() # বট ক্লায়েন্টের ইনস্ট্যান্স নেওয়া হচ্ছে
-    file_info = file_details[0]
-    file_size = file_info.file_size
+    # ... (এই ফাংশনের কোড আগের মতোই থাকবে, কোনো পরিবর্তন নেই) ...
+    # ... (আগের উত্তরে দেওয়া media_streamer এর কোডটি এখানে বসবে) ...
 
-    from_bytes, until_bytes = 0, file_size - 1
-    if range_header:
-        try:
-            from_bytes, until_bytes = [int(x) for x in range_header.replace("bytes=", "").split("-")]
-        except ValueError:
-            pass # ভুল রেঞ্জ হেডার উপেক্ষা করা হচ্ছে
-
-    req_length = until_bytes - from_bytes + 1
-
-    # --- HTTP Headers সেট করা হচ্ছে ---
-    mime_type = mimetypes.guess_type(file_info.file_name)[0] or "application/octet-stream"
-    headers = {
-        "Content-Type": mime_type,
-        "Content-Range": f"bytes {from_bytes}-{until_bytes}/{file_size}",
-        "Content-Length": str(req_length),
-        "Accept-Ranges": "bytes",
-        "Content-Disposition": f'attachment; filename="{file_info.file_name}"'
-    }
-
-    # --- স্ট্রিমিং শুরু করা হচ্ছে ---
-    response = web.StreamResponse(status=206 if range_header else 200, headers=headers)
-    await response.prepare(request)
-
-    # Pyrogram থেকে ফাইল চাঙ্ক (chunk) ডাউনলোড এবং ক্লায়েন্টকে পাঠানো হচ্ছে
-    async for chunk in stream_client.iter_download(media_id, offset=from_bytes):
-        try:
-            await response.write(chunk)
-        except Exception as e:
-            logger.warning(f"Connection lost during streaming: {e}")
-            break
-            
-    return response
 
 # --- /start কমান্ডের ফাইল হ্যান্ডলার ---
 @Client.on_message(filters.private & filters.command("start"))
@@ -89,11 +93,19 @@ async def start_file_handler(client, message):
             
         file_info = file_details[0]
         
+        stream_link = f"{URL}watch/{file_info.id}/{file_info.file_name.replace(' ', '_')}"
+
+        buttons = [
+            [InlineKeyboardButton("🖥️ Watch Online 🖥️", url=stream_link)],
+            [InlineKeyboardButton("📥 Direct Download 📥", url=f"{URL}download/{file_info.id}/{file_info.file_name.replace(' ', '_')}")]
+        ]
+        
         msg = await client.send_cached_media(
             chat_id=message.from_user.id,
             file_id=file_id,
-            caption=f"**{file_info.file_name}**",
-            protect_content=PROTECT_CONTENT
+            caption=f"**File:** `{file_info.file_name}`\n**Size:** `{get_size(file_info.file_size)}`",
+            protect_content=PROTECT_CONTENT,
+            reply_markup=InlineKeyboardMarkup(buttons)
         )
 
         if AUTO_DELETE:
