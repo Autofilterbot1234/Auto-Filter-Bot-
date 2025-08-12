@@ -1,7 +1,7 @@
 import re
 import os
 from os import environ
-from script import script  #<-- সমস্যা ১ ঠিক করা হয়েছে
+from Script import script  # <-- Case-sensitive import fixed
 
 # --- Utility Functions ---
 id_pattern = re.compile(r'^.\d+$')
@@ -30,7 +30,7 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "CTG_Movies_Bot")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'MoviesCollection')
 
 # --- Admins and Channel IDs ---
-ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246 8090888302').split()] #<-- সমস্যা ২ ঠিক করা হয়েছে (স্পেস ব্যবহার করে)
+ADMINS = [int(admin) for admin in environ.get('ADMINS', '5370676246 8090888302').split()]
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002610927997'))
 CHANNELS = [int(ch) for ch in environ.get('CHANNELS', '-1002728760268').split()]
 
